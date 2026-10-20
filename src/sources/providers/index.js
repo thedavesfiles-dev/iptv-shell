@@ -15,7 +15,9 @@
  * Para agregar uno nuevo: crea el archivo en esta carpeta e impórtalo aquí.
  * El orden del arreglo es la prioridad cuando dos fuentes son del mismo tipo.
  */
+import miEmbed from './mi-embed.js';
 import jellyfin from './jellyfin.js';
 import archive from './archive.js';
 
-export default [jellyfin, archive];
+export default [miEmbed, jellyfin, archive];
+
