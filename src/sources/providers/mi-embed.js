@@ -2,38 +2,28 @@
 
 export default {
   id: 'mi-embed',
-  name: 'Servidores Alternativos',
+  name: 'Servidor Alternativo',
 
   supports(req) {
     return req.type === 'movie' || req.type === 'tv';
   },
 
   async find(req) {
-    const fuentes = [];
+    let embedUrl = '';
 
-    // Servidor 1: VidSrc CC
+    // Usamos el dominio activo vidsrc.me con las variables bien estructuradas
     if (req.type === 'movie') {
-      fuentes.push({ src: `https://vidsrc.cc{req.tmdbId}`, type: 'iframe', label: 'Espejo Principal (Latino/Sub)' });
-    } else {
-      fuentes.push({ src: `https://vidsrc.cc{req.tmdbId}/${req.season}/${req.episode}`, type: 'iframe', label: 'Espejo Principal (Latino/Sub)' });
+      embedUrl = `https://vidsrc.me{req.tmdbId}`;
+    } else if (req.type === 'tv') {
+      embedUrl = `https://vidsrc.me{req.tmdbId}&sea=${req.season}&epi=${req.episode}`;
     }
 
-    // Servidor 2: VidSrc TO (Alternativo muy usado en Anime)
-    if (req.type === 'movie') {
-      fuentes.push({ src: `https://vidsrc.to{req.tmdbId}`, type: 'iframe', label: 'Espejo 2 (Castellano/Sub)' });
-    } else {
-      fuentes.push({ src: `https://vidsrc.to{req.tmdbId}/${req.season}/${req.episode}`, type: 'iframe', label: 'Espejo 2 (Castellano/Sub)' });
-    }
-
-    // Servidor 3: AutoEmbed (Agregador secundario por ID de IMDb)
-    if (req.imdbId) {
-      if (req.type === 'movie') {
-        fuentes.push({ src: `https://autoembed.cc{req.imdbId}`, type: 'iframe', label: 'Espejo 3 (Multilenguaje)' });
-      } else {
-        fuentes.push({ src: `https://autoembed.cc{req.imdbId}/${req.season}/${req.episode}`, type: 'iframe', label: 'Espejo 3 (Multilenguaje)' });
+    return [
+      {
+        src: embedUrl,
+        type: 'iframe',
+        label: 'Servidor Principal (Latino/Sub)'
       }
-    }
-
-    return fuentes;
+    ];
   }
 };
