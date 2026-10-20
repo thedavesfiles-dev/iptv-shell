@@ -1,0 +1,17 @@
+# Dependencias y compilados (se regeneran con npm install / npm run build)
+node_modules
+dist
+dev-dist
+
+# Secretos: NUNCA se suben a GitHub
+.env
+.env.local
+.env.*.local
+*.local
+
+# Sistema / editores
+*.log
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json

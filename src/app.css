@@ -1,0 +1,42 @@
+:root {
+  --bg: #0f1117;
+  --surface: #171a22;
+  --surface-2: #232733;
+  --text: #e8eaf0;
+  --muted: #9097a8;
+  --accent: #e5484d;
+  color-scheme: dark;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+input, select, button {
+  font: inherit;
+  color: inherit;
+  background: var(--surface);
+  border: 1px solid var(--surface-2);
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+}
+
+button {
+  cursor: pointer;
+  background: var(--surface-2);
+}
+button:hover:not(:disabled) { filter: brightness(1.15); }
+button:disabled { opacity: 0.6; cursor: default; }
+button.ghost { background: transparent; }
+
+/* Foco muy visible: necesario para navegar con control remoto en TV */
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
