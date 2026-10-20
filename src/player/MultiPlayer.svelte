@@ -6,7 +6,7 @@
    */
   import Player from './Player.svelte';
 
-  let { sources = [], title = '', poster = '' } = $props();
+  let { sources = [], title = '', poster = '', actions = null } = $props();
 
   const START_TIMEOUT_MS = 20000;
 
@@ -68,6 +68,7 @@
     type={current.type}
     {title}
     {poster}
+    {actions}
     onready={onready}
     onerror={(msg) => next(msg)}
   />

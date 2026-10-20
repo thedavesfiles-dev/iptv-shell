@@ -3,6 +3,7 @@
   import { getTrending, search, hasKey } from '../api/tmdb.js';
   import PosterGrid from '../components/PosterGrid.svelte';
   import DetailView from '../components/DetailView.svelte';
+  import { favorites } from '../stores/favorites.svelte.js';
 
   const TYPES = [
     { id: 'all', label: 'Todo' },
@@ -84,6 +85,15 @@
 </script>
 
 <section class="catalog">
+  <section class="favs">
+    <h2 class="heading">♥ Mis películas y series favoritas</h2>
+    {#if favorites.titles.length}
+      <PosterGrid row items={favorites.titles} onselect={(it) => (selected = it)} />
+    {:else}
+      <p class="empty">Toca el ♡ de cualquier póster para guardarlo aquí.</p>
+    {/if}
+  </section>
+
   <div class="toolbar">
     <div class="segmented" role="group" aria-label="Tipo">
       {#each TYPES as t (t.id)}
@@ -157,6 +167,9 @@
   .search { flex: 1; min-width: 200px; border-radius: 999px; padding-left: 1rem; }
 
   .heading { font-size: 1.15rem; margin: 1.2rem 0 0.9rem; }
+  .favs { margin-bottom: 0.6rem; }
+  .favs .heading { margin-top: 0.2rem; }
+  .favs .empty { margin: 0 0 0.8rem; font-size: 0.9rem; }
 
   .error {
     display: flex;

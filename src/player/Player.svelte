@@ -9,6 +9,7 @@
    */
   import Hls from 'hls.js';
   import { detectType } from './detectType.js';
+  import { castInfo, initCast, castMedia, stopCasting } from './cast.svelte.js';
 
   let {
     src = '',
@@ -18,8 +19,63 @@
     autoplay = true,
     muted = false,
     onerror = null,     // callback opcional (mensaje) => {}
-    onready = null      // callback cuando el video empieza a reproducirse
+    onready = null,     // callback cuando el video empieza a reproducirse
+    actions = null      // snippet opcional: botones extra en la barra (p. ej. favorito)
   } = $props();
+
+  /* ---------- Transmitir a TV ---------- */
+  let airplayAvailable = $state(false);
+  let remoteAvailable = $state(false);
+  let castMsg = $state('');
+
+  initCast(); // carga el SDK de Google Cast en segundo plano (solo hace algo en Chrome/Edge)
+
+  const canCast = $derived(castInfo.available || airplayAvailable || remoteAvailable);
+
+  // AirPlay (Safari) y Remote Playback API (solo video directo, no hls.js)
+  $effect(() => {
+    const v = video;
+    src; // volver a evaluar al cambiar de fuente
+    if (!v) return;
+    const onAirplay = (e) => (airplayAvailable = e.availability === 'available');
+    v.addEventListener('webkitplaybacktargetavailabilitychanged', onAirplay);
+    let watchId = null;
+    remoteAvailable = false;
+    if (v.remote?.watchAvailability) {
+      v.remote
+        .watchAvailability((a) => (remoteAvailable = a))
+        .then((id) => (watchId = id))
+        .catch(() => (remoteAvailable = false)); // no soportado (p. ej. con hls.js)
+    }
+    return () => {
+      v.removeEventListener('webkitplaybacktargetavailabilitychanged', onAirplay);
+      if (watchId !== null) v.remote.cancelWatchAvailability(watchId).catch(() => {});
+    };
+  });
+
+  async function startCast() {
+    castMsg = '';
+    try {
+      if (castInfo.available) {
+        castMsg = 'Conectando con la TV…';
+        await castMedia({
+          src,
+          type: resolvedType === 'hls' ? 'hls' : 'mp4',
+          title,
+          poster,
+          live: !Number.isFinite(video?.duration)
+        });
+        video?.pause();
+        castMsg = '';
+      } else if (airplayAvailable && video?.webkitShowPlaybackTargetPicker) {
+        video.webkitShowPlaybackTargetPicker();
+      } else if (remoteAvailable) {
+        await video.remote.prompt();
+      }
+    } catch (e) {
+      castMsg = e.message;
+    }
+  }
 
   let video = $state(null);
   let hls = null;
@@ -220,6 +276,7 @@
       {muted}
       controls
       playsinline
+      x-webkit-airplay="allow"
       preload="auto"
       onplaying={() => { status = 'playing'; onready?.(); }}
       oncanplay={() => onready?.()}
@@ -256,8 +313,15 @@
         </select>
       </label>
     {/if}
+    {@render actions?.()}
+    {#if castInfo.connected}
+      <button class="cast on" onclick={stopCasting} title="Detener transmisión">📺 En {castInfo.deviceName || 'la TV'} · Detener</button>
+    {:else if canCast}
+      <button class="cast" onclick={startCast} title="Transmitir a TV / Chromecast">📺 Transmitir</button>
+    {/if}
     <button onclick={toggleFullscreen}>Pantalla completa</button>
   </div>
+  {#if castMsg}<p class="castmsg">{castMsg}</p>{/if}
 {/if}
 
 <style>
@@ -331,6 +395,8 @@
     gap: 0.75rem;
     padding: 0.6rem 0.2rem;
   }
+  .cast.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .castmsg { margin: 0 0.2rem 0.4rem; font-size: 0.85rem; color: #ffd166; }
   .title { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .badge {
     font-size: 0.7rem;

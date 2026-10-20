@@ -4,6 +4,8 @@
   import { resolveSources, resolveUrl } from '../sources/resolve.js';
   import MultiPlayer from '../player/MultiPlayer.svelte';
   import SeasonBrowser from './SeasonBrowser.svelte';
+  import FavButton from './FavButton.svelte';
+  import { isFavTitle, toggleTitle } from '../stores/favorites.svelte.js';
 
   let { item, onclose } = $props();
 
@@ -162,6 +164,7 @@
       {#if error}<p class="error">⚠ {error}</p>{/if}
 
       <div class="actions">
+        <FavButton active={isFavTitle(item.key)} label={d.title} onclick={() => toggleTitle({ ...item, ...(details || {}) })} />
         {#if d.type === 'movie'}
           <button class="primary" onclick={() => play()} disabled={resolving}>
             {resolving ? 'Buscando…' : '▶ Reproducir'}
@@ -181,7 +184,11 @@
 
       {#if playing}
         <div class="player" bind:this={playerBox}>
-          <MultiPlayer sources={playing.sources} title={playing.title} poster={img(d.backdrop, 'w780')} />
+          <MultiPlayer sources={playing.sources} title={playing.title} poster={img(d.backdrop, 'w780')}>
+            {#snippet actions()}
+              <FavButton size="sm" active={isFavTitle(item.key)} label={d.title} onclick={() => toggleTitle({ ...item, ...(details || {}) })} />
+            {/snippet}
+          </MultiPlayer>
         </div>
       {/if}
 
