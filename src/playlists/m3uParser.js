@@ -116,8 +116,12 @@ export function parseM3U(text, { baseUrl } = {}) {
     if (isUrlLine(line)) {
       const p = pending || newPending();
       const url = resolveUrl(line, baseUrl);
-      const group = p.attrs['group-title'] || p.extgrp || 'Sin grupo';
-      const name = p.title || p.attrs['tvg-name'] || url.split('/').pop() || 'Canal';
+      let name = p.title || p.attrs['tvg-name'] || url.split('/').pop() || 'Canal';
+      let group = p.attrs['group-title'] || p.extgrp || '';
+      // Listas sin group-title que usan el formato "[MX]Canal": el prefijo se usa como grupo
+      const prefix = !group && name.match(/^\[([^\]]{1,20})\]\s*(.+)$/);
+      if (prefix) { group = prefix[1]; name = prefix[2]; }
+      group = group || 'Sin grupo';
 
       groupSet.add(group);
       channels.push({

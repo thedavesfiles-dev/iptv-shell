@@ -124,6 +124,12 @@
     status = 'loading';
     errorMsg = '';
 
+    // Una página https no puede cargar video http:// (contenido mixto): el navegador lo bloquea
+    if (location.protocol === 'https:' && url.startsWith('http://')) {
+      fail('Este canal usa http:// y el navegador lo bloquea en la versión web (https). Funcionará en la app Android.');
+      return;
+    }
+
     if (kind === 'hls') {
       attachHls(url);
     } else {
