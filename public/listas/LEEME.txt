@@ -1,0 +1,10 @@
+Pon aquí tus archivos .m3u propios (por ejemplo: mis-canales.m3u).
+Luego agrégalos en public/listas.json así:
+
+    {
+      "nombre": "Mis canales",
+      "archivo": "mis-canales.m3u"
+    }
+
+Haz Commit + Push en GitHub Desktop y aparecerán en la app de todos tus dispositivos.
+Recuerda: el repositorio es público, cualquiera puede ver estos archivos.

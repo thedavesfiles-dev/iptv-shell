@@ -1,0 +1,51 @@
+{
+  "_instrucciones": [
+    "Estas son las listas que aparecen en 'Fuentes Comunitarias' de Canales en Vivo.",
+    "Para agregar una: copia un bloque { ... }, pon una coma entre bloques y cambia nombre y url.",
+    "Si tienes un archivo .m3u propio, ponlo en la carpeta public/listas/ y usa \"archivo\": \"nombre.m3u\" en lugar de \"url\".",
+    "La primera lista de 'listas' es la que se abre por defecto la primera vez.",
+    "OJO: el repositorio es público; cualquiera puede ver lo que pongas aquí."
+  ],
+  "listas": [
+    {
+      "nombre": "En español",
+      "descripcion": "Todos los canales en idioma español (iptv-org)",
+      "url": "https://iptv-org.github.io/iptv/languages/spa.m3u"
+    },
+    {
+      "nombre": "México",
+      "descripcion": "Canales de México (iptv-org)",
+      "url": "https://iptv-org.github.io/iptv/countries/mx.m3u"
+    },
+    {
+      "nombre": "Canadá",
+      "descripcion": "Canales de Canadá (iptv-org)",
+      "url": "https://iptv-org.github.io/iptv/countries/ca.m3u"
+    },
+    {
+      "nombre": "Noticias",
+      "descripcion": "Noticias de todo el mundo (iptv-org)",
+      "url": "https://iptv-org.github.io/iptv/categories/news.m3u"
+    },
+    {
+      "nombre": "Películas 24/7",
+      "descripcion": "Canales gratuitos de cine con publicidad (iptv-org)",
+      "url": "https://iptv-org.github.io/iptv/categories/movies.m3u"
+    },
+    {
+      "nombre": "Infantiles",
+      "descripcion": "Canales para niños (iptv-org)",
+      "url": "https://iptv-org.github.io/iptv/categories/kids.m3u"
+    },
+    {
+      "nombre": "Música",
+      "descripcion": "Canales musicales (iptv-org)",
+      "url": "https://iptv-org.github.io/iptv/categories/music.m3u"
+    },
+    {
+      "nombre": "Internacionales (imDazui)",
+      "descripcion": "Televisoras de varios países · lista de 2024, muchos enlaces http",
+      "url": "https://raw.githubusercontent.com/imDazui/Tvlist-awesome-m3u-m3u8/master/m3u/%E5%9B%BD%E5%A4%96%E7%94%B5%E8%A7%86%E5%8F%B0202409.m3u"
+    }
+  ]
+}

@@ -4,7 +4,7 @@
   import Player from '../player/Player.svelte';
   import FavButton from '../components/FavButton.svelte';
   import { loadM3UFromUrl, loadM3UFromFile, filterChannels } from '../playlists/m3uParser.js';
-  import { PRESETS, DEFAULT_PRESET_ID, getPreset } from '../playlists/presets.js';
+  import { presets, loadPresets, getPreset, defaultPresetId } from '../playlists/presets.svelte.js';
   import { live } from '../stores/live.svelte.js';
   import { myLists, addList, openList, getList, renameList, removeList } from '../stores/playlists.svelte.js';
   import { favorites, isFavChannel, toggleChannel } from '../stores/favorites.svelte.js';
@@ -184,11 +184,13 @@
   $effect(() => {
     if (autoTried || live.channels.length) return;
     autoTried = true;
-    const last = load(SOURCE_KEY, '');
-    const valid =
-      (last.startsWith?.('preset:') && getPreset(last.slice(7))) ||
-      (last.startsWith?.('list:') && getList(last.slice(5)));
-    openSource(valid ? last : `preset:${DEFAULT_PRESET_ID}`);
+    loadPresets().then(() => {
+      const last = load(SOURCE_KEY, '');
+      const valid =
+        (last.startsWith?.('preset:') && getPreset(last.slice(7))) ||
+        (last.startsWith?.('list:') && getList(last.slice(5)));
+      openSource(valid ? last : `preset:${defaultPresetId()}`);
+    });
   });
 </script>
 
@@ -255,7 +257,7 @@
           </optgroup>
         {/if}
         <optgroup label="Fuentes Comunitarias">
-          {#each PRESETS as p (p.id)}
+          {#each presets.items as p (p.id)}
             <option value={`preset:${p.id}`}>{p.name}</option>
           {/each}
         </optgroup>
