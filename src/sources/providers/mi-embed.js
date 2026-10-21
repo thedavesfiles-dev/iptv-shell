@@ -12,7 +12,9 @@ const provider = {
     if (!req) return [];
     
     let embedUrl = '';
-    const baseUrl = 'https://vidsrc.sh';
+    
+    // Cambiamos al espejo .cc que traduce los IDs numéricos de TMDB automáticamente en series
+    const baseUrl = 'https://vidsrc.cc';
 
     if (req.type === 'movie') {
       const movieId = req.imdbId || req.tmdbId;
@@ -23,10 +25,10 @@ const provider = {
       const serieId = req.imdbId || req.tmdbId;
       if (!serieId) return [];
       
-      // Mapeo directo usando el contrato nativo de tu index.js
       const temporadaNum = req.season || 1;
       const episodioNum = req.episode || 1;
       
+      // Estructura oficial del espejo compatible: /tv/{id}/{temporada}/{episodio}
       embedUrl = `${baseUrl}/tv/${serieId}/${temporadaNum}/${episodioNum}`;
     }
 
@@ -40,6 +42,5 @@ const provider = {
   }
 };
 
-// ESTA ES LA LÍNEA QUE FALTA Y QUE REPARA EL ERROR DE GITHUB
 export default provider;
 
