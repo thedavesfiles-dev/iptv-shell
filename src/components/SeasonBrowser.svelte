@@ -129,11 +129,12 @@
     flex-shrink: 0;
     padding: 0.4rem 1rem;
     color: var(--muted);
-    font-style: italic;
-    font-size: 1rem;
-    clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+    font-size: 0.85rem;
+    border-radius: 999px;
+    border-color: #3a2a1f;
+    background: transparent;
   }
-  .season-tabs button.active { background: var(--red-bg); border-color: #ff6a5a; color: #fff; box-shadow: var(--red-shadow); }
+  .season-tabs button.active { background: linear-gradient(180deg, var(--gold-light), var(--gold) 60%, #b48d3c); border-color: var(--gold); color: #1a0f0b; }
 
   .season-overview { color: var(--muted); font-size: 0.9rem; line-height: 1.5; margin: 0.6rem 0 0; }
   .error { color: #ffb4b4; }
@@ -146,17 +147,17 @@
     border-radius: 2px;
     border-left: 3px solid transparent;
   }
-  .episode:nth-child(even) { background: rgba(255, 255, 255, 0.025); }
-  .episode:hover { background: rgba(47, 95, 184, 0.2); }
-  .episode.active { background: rgba(227, 38, 29, 0.18); border-left-color: var(--accent); }
+  .episode { border-bottom: 1px solid rgba(217, 180, 90, 0.1); }
+  .episode:hover { background: rgba(217, 180, 90, 0.06); }
+  .episode.active { background: linear-gradient(90deg, rgba(168, 34, 42, 0.45), transparent); border-left-color: var(--gold); }
 
   .play { padding: 0; border: 0; background: none; box-shadow: none; border-radius: 2px; flex-shrink: 0; }
   .thumb {
     position: relative;
     width: 168px;
     aspect-ratio: 16 / 9;
-    border: 2px solid #34456a;
-    border-radius: 2px;
+    border: 1px solid var(--gold-dark);
+    border-radius: 1px;
     overflow: hidden;
     background: var(--surface-2);
   }
@@ -182,10 +183,10 @@
     background: none;
     box-shadow: none;
     text-align: left;
-    font-style: italic;
-    font-weight: 800;
-    font-size: 1.1rem;
-    letter-spacing: 0.02em;
+    font-weight: 600;
+    font-size: 1.02rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
   .title:hover { text-decoration: underline; }
   .num { color: var(--gold); }
@@ -223,7 +224,7 @@
     border: 0;
     background: none;
     box-shadow: none;
-    color: #ff6a5a;
+    color: var(--gold);
     font-size: 0.8rem;
     margin-top: 0.2rem;
   }

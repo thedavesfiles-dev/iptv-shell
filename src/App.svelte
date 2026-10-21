@@ -41,24 +41,21 @@
 
 <style>
   main { min-height: calc(100vh - 120px); }
-  footer { padding: 2rem 0 0; }
+  footer { padding: 2.5rem 0 0; }
   .bar {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 1rem;
-    padding: 0.55rem 1rem;
-    background: var(--red-bg);
-    box-shadow: var(--red-shadow);
-    color: #fff;
+    justify-content: center;
+    gap: 0.4rem 1rem;
+    padding: 0.9rem 1rem 1.1rem;
+    border-top: 1px solid transparent;
+    border-image: var(--gold-line) 1;
+    background: linear-gradient(180deg, #160e0b, #0c0807);
+    color: var(--muted);
     font-size: 0.75rem;
+    text-align: center;
   }
-  .brand {
-    font-family: var(--font-display);
-    font-weight: 900;
-    font-style: italic;
-    font-size: 1.2rem;
-    letter-spacing: 0.02em;
-  }
-  .credit { opacity: 0.92; }
-  .credit a { color: #fff; font-weight: 700; }
+  .brand { font-family: var(--font-marquee); font-size: 1.1rem; color: var(--gold); }
+  .credit a { color: var(--gold-light); font-weight: 600; }
 </style>

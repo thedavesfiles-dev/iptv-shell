@@ -77,37 +77,28 @@
     letter-spacing: normal;
     font-family: var(--font);
     font-weight: 400;
+    color: var(--text);
     display: flex;
     flex-direction: column;
-    gap: 0;
-    border-radius: 3px;
+    gap: 0.5rem;
   }
-  .card:hover { filter: none; }
   .card:hover .poster, .card:focus-visible .poster {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 1px var(--gold), 0 10px 24px rgba(0, 0, 0, 0.6);
-    transform: translateY(-3px);
+    border-color: var(--gold-light);
+    box-shadow: 0 0 0 1px var(--gold-light), 0 0 26px rgba(255, 200, 120, 0.28), 0 14px 30px rgba(0, 0, 0, 0.7);
+    transform: translateY(-4px);
   }
+  .card:hover .title { color: var(--gold-light); }
   .card:focus-visible { outline: none; }
 
-  /* Póster con marco metálico biselado y brillo de vidrio arriba */
+  /* Cartel enmarcado: filo dorado + paspartú negro */
   .poster {
     position: relative;
     aspect-ratio: 2 / 3;
-    border: 2px solid #3a4c74;
-    border-bottom: 0;
-    border-radius: 3px 3px 0 0;
-    overflow: hidden;
-    background: var(--panel-bg);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
-    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
-  }
-  .poster::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 22%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.55) 100%);
-    pointer-events: none;
+    padding: 4px;
+    border: 1px solid var(--gold-dark);
+    background: #0a0605;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.55);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   }
   .poster img {
     width: 100%;
@@ -122,73 +113,59 @@
     padding: 0.5rem;
     text-align: center;
     color: var(--muted);
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-style: italic;
-    text-transform: uppercase;
+    font-family: var(--font-marquee);
   }
 
-  /* Calificación: número grande tipo marcador */
+  /* Calificación: sello dorado */
   .rating {
     position: absolute;
     z-index: 1;
-    left: 0;
-    bottom: 6px;
-    padding: 0.05rem 0.45rem 0.05rem 0.35rem;
-    background: var(--panel-bg);
-    border: 1px solid #3a4c74;
-    border-left: 3px solid var(--gold);
-    font-family: var(--font-display);
-    font-weight: 900;
-    font-style: italic;
-    font-size: 1.05rem;
-    color: var(--gold);
-    box-shadow: var(--panel-shadow);
+    left: 8px;
+    bottom: 8px;
+    padding: 0.12rem 0.45rem;
+    border: 1px solid var(--gold);
+    background: rgba(12, 8, 7, 0.88);
+    font-family: var(--font-marquee);
+    font-size: 0.9rem;
+    color: var(--gold-light);
   }
+  .rating::before { content: '★ '; font-size: 0.75em; }
   .kind {
     position: absolute;
     z-index: 1;
-    top: 6px;
-    left: 0;
-    padding: 0.05rem 0.45rem;
-    background: var(--red-bg);
+    top: 8px;
+    left: 8px;
+    padding: 0.1rem 0.45rem;
+    background: rgba(12, 8, 7, 0.82);
+    border: 1px solid rgba(217, 180, 90, 0.45);
     font-family: var(--font-display);
-    font-weight: 800;
-    font-style: italic;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
+    font-weight: 600;
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--gold);
   }
 
-  /* Rótulo inferior: título en mayúsculas condensadas + año */
-  .meta {
-    display: flex;
-    flex-direction: column;
-    padding: 0.35rem 0.5rem 0.4rem;
-    min-width: 0;
-    background: var(--panel-bg);
-    border: 2px solid #3a4c74;
-    border-top: 3px solid var(--accent);
-    border-radius: 0 0 3px 3px;
-  }
+  .meta { display: flex; flex-direction: column; padding: 0 0.15rem; min-width: 0; }
   .title {
     font-family: var(--font-display);
-    font-weight: 800;
-    font-style: italic;
-    font-size: 1rem;
-    line-height: 1.1;
+    font-weight: 600;
+    font-size: 1.02rem;
+    line-height: 1.15;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--text);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    transition: color 0.15s;
   }
-  .year { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.06em; }
+  .year { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.14em; }
 
   @media (max-width: 600px) {
     .kind { display: none; }
-    .title { font-size: 0.85rem; }
-    .rating { font-size: 0.9rem; }
+    .title { font-size: 0.85rem; letter-spacing: 0.03em; }
+    .rating { font-size: 0.78rem; left: 6px; bottom: 6px; }
+    .poster { padding: 3px; }
   }
 </style>

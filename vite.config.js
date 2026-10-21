@@ -28,8 +28,8 @@ export default defineConfig(({ command, isPreview }) => ({
         scope: '.',
         display: 'standalone',
         orientation: 'any', // celular vertical, TV/PC horizontal
-        background_color: '#060a14',
-        theme_color: '#0b1324',
+        background_color: '#0c0807',
+        theme_color: '#140d0b',
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' },

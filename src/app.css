@@ -1,46 +1,42 @@
 /*
- * FD-TV — tema "gráficos de transmisión deportiva nocturna".
- * Fondo oscuro con luces de estadio desenfocadas, paneles metálicos con bisel,
- * títulos en mayúsculas condensadas y barra de acento roja.
+ * FD-TV — tema "sala de cine clásica".
+ * Sala oscura, terciopelo rojo en los costados, detalles dorados art déco,
+ * marquesina con focos y una ligera textura de película.
  */
+@import '@fontsource/limelight/400.css';
 @import '@fontsource/barlow/400.css';
 @import '@fontsource/barlow/500.css';
 @import '@fontsource/barlow/600.css';
+@import '@fontsource/barlow-condensed/500.css';
 @import '@fontsource/barlow-condensed/600.css';
 @import '@fontsource/barlow-condensed/700.css';
-@import '@fontsource/barlow-condensed/800-italic.css';
-@import '@fontsource/barlow-condensed/900-italic.css';
 
 :root {
-  --bg: #060a14;
-  --surface: #121a2b;
-  --surface-2: #1c2740;
-  --surface-3: #26344f;
-  --text: #f2f5fb;
-  --muted: #95a1b8;
-  --accent: #e3261d;          /* rojo de transmisión */
-  --accent-dark: #9c130d;
-  --accent-glow: rgba(227, 38, 29, 0.55);
-  --steel: #2f5fb8;           /* azul acero secundario */
-  --gold: #ffc531;            /* calificaciones / datos clave */
-  --live: #ff2b2b;
+  --bg: #0c0807;
+  --surface: #17100e;
+  --surface-2: #231815;
+  --surface-3: #2f211c;
+  --text: #f3e9d6;            /* crema de programa de mano */
+  --muted: #a8988a;
+  --accent: #a8222a;          /* terciopelo rojo */
+  --accent-dark: #5e0f14;
+  --accent-glow: rgba(214, 60, 50, 0.35);
+  --gold: #d9b45a;            /* dorado art déco */
+  --gold-light: #f2d98f;
+  --gold-dark: #8a6a28;
+  --live: #ff3b30;
 
   --font: 'Barlow', system-ui, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif; /* rótulos */
+  --font-marquee: 'Limelight', Georgia, serif;                    /* títulos de cartelera */
 
-  /* Panel metálico con bisel: brillo arriba, sombra abajo */
-  --panel-bg: linear-gradient(180deg, #22304d 0%, #142038 48%, #0c1426 100%);
-  --panel-border: 1px solid #2e3d5c;
-  --panel-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.45),
-    0 6px 18px rgba(0, 0, 0, 0.55);
-
-  --red-bg: linear-gradient(180deg, #ff4b3a 0%, #e3261d 45%, #a5150e 100%);
-  --red-shadow:
-    inset 0 1px 0 rgba(255, 200, 190, 0.6),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.35),
-    0 0 14px var(--accent-glow);
+  /* Superficies */
+  --panel-bg: linear-gradient(180deg, #1d1411 0%, #140d0b 100%);
+  --panel-border: 1px solid #3a2a1f;
+  --panel-shadow: inset 0 0 0 1px rgba(217, 180, 90, 0.08), 0 10px 26px rgba(0, 0, 0, 0.6);
+  --red-bg: linear-gradient(180deg, #b8262f 0%, #8e1b22 55%, #6a1218 100%);
+  --red-shadow: inset 0 1px 0 rgba(255, 190, 170, 0.25), 0 0 16px var(--accent-glow);
+  --gold-line: linear-gradient(90deg, transparent, var(--gold) 15%, var(--gold-light) 50%, var(--gold) 85%, transparent);
 
   color-scheme: dark;
   font-family: var(--font);
@@ -55,14 +51,33 @@ body {
   min-height: 100vh;
   color: var(--text);
   background-color: var(--bg);
-  /* "Luces de estadio" desenfocadas + viñeta */
   background-image:
-    radial-gradient(ellipse 45% 30% at 18% -6%, rgba(120, 160, 255, 0.28), transparent 70%),
-    radial-gradient(ellipse 40% 28% at 82% -8%, rgba(120, 160, 255, 0.22), transparent 70%),
-    radial-gradient(ellipse 70% 40% at 50% 0%, rgba(47, 95, 184, 0.22), transparent 75%),
-    radial-gradient(ellipse 90% 60% at 50% 110%, rgba(227, 38, 29, 0.10), transparent 70%),
-    linear-gradient(180deg, #0b1324 0%, #060a14 60%);
+    radial-gradient(ellipse 60% 38% at 50% -4%, rgba(255, 200, 130, 0.14), transparent 70%),
+    radial-gradient(ellipse 80% 50% at 50% 115%, rgba(168, 34, 42, 0.12), transparent 70%),
+    linear-gradient(180deg, #140d0b 0%, #0c0807 70%);
   background-attachment: fixed;
+}
+/* Telón de terciopelo rojo, visible solo en las orillas */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: repeating-linear-gradient(90deg, #5a0d13 0 10px, #2a0508 10px 22px, #4a0a10 22px 30px);
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, transparent 7%, transparent 93%, #000 100%);
+  mask-image: linear-gradient(90deg, #000 0%, transparent 7%, transparent 93%, #000 100%);
+  opacity: 0.55;
+}
+/* Textura de película (grano muy sutil) */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* ---------- Controles base ---------- */
@@ -70,118 +85,129 @@ body {
 input, select, button {
   font: inherit;
   color: inherit;
-  background: #0b1222;
-  border: 1px solid #2a3856;
-  border-radius: 3px;
+  background: #120c0a;
+  border: 1px solid #3a2a1f;
+  border-radius: 2px;
   padding: 0.55rem 0.7rem;
 }
-input:focus, select:focus { border-color: var(--steel); outline: none; box-shadow: 0 0 0 2px rgba(47, 95, 184, 0.45); }
+input::placeholder { color: #7d6e62; }
+input:focus, select:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 0 2px rgba(217, 180, 90, 0.25); }
 
 button {
   cursor: pointer;
   background: var(--panel-bg);
-  border: var(--panel-border);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--gold-dark);
   font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  color: var(--text);
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
-button:hover:not(:disabled) { filter: brightness(1.18); }
+button:hover:not(:disabled) { border-color: var(--gold); color: var(--gold-light); }
 button:active:not(:disabled) { transform: translateY(1px); }
-button:disabled { opacity: 0.55; cursor: default; }
-button.ghost { background: transparent; box-shadow: none; }
+button:disabled { opacity: 0.5; cursor: default; }
+button.ghost { background: transparent; border-color: #3a2a1f; }
 button.primary, button.red {
   background: var(--red-bg);
-  border-color: #ff6a5a;
+  border-color: var(--gold);
   color: #fff;
   box-shadow: var(--red-shadow);
 }
+button.primary:hover:not(:disabled), button.red:hover:not(:disabled) { color: #fff; filter: brightness(1.12); }
 
-/* Foco muy visible: necesario para navegar con control remoto en TV */
+/* Foco visible para control remoto / teclado */
 :focus-visible {
-  outline: 3px solid var(--gold);
-  outline-offset: 2px;
+  outline: 2px solid var(--gold-light);
+  outline-offset: 3px;
 }
 
-/* ---------- Piezas del tema reutilizables ---------- */
+/* ---------- Piezas del tema ---------- */
 
-/* Panel metálico biselado */
 .panel {
   background: var(--panel-bg);
   border: var(--panel-border);
-  border-radius: 4px;
+  border-radius: 2px;
   box-shadow: var(--panel-shadow);
 }
 
-/* Encabezado de sección tipo "rótulo de transmisión":
-   bloque rojo inclinado + título en mayúsculas condensadas + subtítulo */
+/* Encabezado de sección estilo cartelera:  ◆ TÍTULO ───────
+                                              subtítulo        */
 .sect {
   display: flex;
-  align-items: stretch;
-  gap: 0;
-  margin: 1.4rem 0 0.9rem;
-  min-height: 40px;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 1.8rem 0 1rem;
 }
 .sect .tag {
-  display: flex;
-  align-items: center;
-  padding: 0 1rem 0 0.8rem;
-  background: var(--red-bg);
-  box-shadow: var(--red-shadow);
-  clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  position: relative;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--gold-light);
   font-family: var(--font-display);
-  font-weight: 900;
-  font-style: italic;
-  font-size: 1.05rem;
+  font-weight: 700;
+  font-size: 0.72rem;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #fff;
 }
+/* rombo art déco detrás del ícono */
+.sect .tag::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  z-index: -1;
+  transform: rotate(45deg);
+  border: 1px solid var(--gold);
+  background: #120c0a;
+  box-shadow: 0 0 0 3px #120c0a, 0 0 0 4px rgba(217, 180, 90, 0.35);
+}
+.sect .tag { isolation: isolate; }
 .sect .label {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: -6px;
-  padding: 0.25rem 1rem 0.25rem 1.2rem;
-  background: linear-gradient(90deg, rgba(34, 48, 77, 0.95), rgba(20, 32, 56, 0.6) 70%, transparent);
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%);
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.9rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(90deg, var(--gold), rgba(217, 180, 90, 0.15) 70%, transparent) 1;
 }
 .sect h2, .sect h3 {
   margin: 0;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-style: italic;
-  font-size: 1.35rem;
-  line-height: 1.05;
+  font-family: var(--font-marquee);
+  font-weight: 400;
+  font-size: 1.55rem;
+  line-height: 1.1;
   letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: #fff;
+  color: var(--text);
 }
 .sect small {
-  color: var(--muted);
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-weight: 600;
   font-size: 0.78rem;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
-/* Etiqueta "EN VIVO" con punto que pulsa */
+/* Etiqueta "EN VIVO" tipo letrero de neón */
 .live-tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.12rem 0.5rem;
-  border-radius: 2px;
-  background: var(--red-bg);
-  box-shadow: var(--red-shadow);
+  gap: 0.4rem;
+  padding: 0.14rem 0.55rem;
+  border: 1px solid #ff7b70;
+  border-radius: 999px;
+  background: rgba(255, 59, 48, 0.12);
   font-family: var(--font-display);
-  font-weight: 800;
-  font-style: italic;
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  color: #fff;
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: 0.18em;
+  color: #ffb3ab;
+  text-shadow: 0 0 6px rgba(255, 80, 70, 0.9);
+  box-shadow: 0 0 10px rgba(255, 59, 48, 0.35), inset 0 0 8px rgba(255, 59, 48, 0.25);
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -190,21 +216,20 @@ button.primary, button.red {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #fff;
-  animation: livepulse 1.4s ease-in-out infinite;
+  background: var(--live);
+  box-shadow: 0 0 6px var(--live);
+  animation: livepulse 1.6s ease-in-out infinite;
 }
-@keyframes livepulse { 50% { opacity: 0.25; } }
+@keyframes livepulse { 50% { opacity: 0.3; } }
 
-/* Número grande tipo marcador */
+/* Número de calificación */
 .bignum {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-style: italic;
+  font-family: var(--font-marquee);
+  font-weight: 400;
   line-height: 1;
 }
 
-/* Barras de desplazamiento discretas */
-* { scrollbar-width: thin; scrollbar-color: #33476d transparent; }
+* { scrollbar-width: thin; scrollbar-color: #4a3526 transparent; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }

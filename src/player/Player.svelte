@@ -345,22 +345,26 @@
 {/if}
 
 <style>
-  /* Monitor con marco metálico biselado */
+  /* La pantalla: marco oscuro con filo dorado y resplandor del proyector */
   .player {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
     background: #000;
-    border: 3px solid #34456a;
-    border-radius: 4px;
+    border: 1px solid var(--gold-dark);
+    border-radius: 2px;
     box-shadow:
-      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-      0 0 0 1px #0a1222,
-      0 14px 34px rgba(0, 0, 0, 0.7);
+      inset 0 0 0 1px rgba(0, 0, 0, 0.8),
+      0 0 0 6px #0f0a08,
+      0 0 0 7px rgba(217, 180, 90, 0.35),
+      0 0 60px rgba(255, 210, 150, 0.08),
+      0 22px 50px rgba(0, 0, 0, 0.75);
     overflow: hidden;
     outline: none;
+    margin: 7px 7px 0;
+    width: calc(100% - 14px);
   }
-  .player:focus-visible { border-color: var(--gold); }
+  .player:focus-visible { border-color: var(--gold-light); }
 
   video, iframe {
     width: 100%;
@@ -378,16 +382,12 @@
     padding: 1rem;
     text-align: center;
     color: var(--muted);
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-style: italic;
-    font-size: 1.2rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-family: var(--font-marquee);
+    font-size: 1.15rem;
+    letter-spacing: 0.04em;
     background:
-      radial-gradient(ellipse 60% 50% at 50% 40%, rgba(47, 95, 184, 0.25), transparent 70%),
-      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 4px),
-      #04070e;
+      radial-gradient(ellipse 55% 45% at 50% 45%, rgba(255, 220, 160, 0.10), transparent 70%),
+      #050303;
   }
 
   .overlay {
@@ -424,22 +424,20 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* Rótulo inferior ("lower third") con acento rojo */
+  /* Franja bajo la pantalla, como un boleto */
   .bar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem 0.75rem;
-    margin-top: 6px;
-    padding: 0.45rem 0.6rem;
-    background: var(--panel-bg);
-    border: var(--panel-border);
-    border-top: 3px solid var(--accent);
-    border-radius: 0 0 4px 4px;
-    box-shadow: var(--panel-shadow);
+    margin-top: 16px;
+    padding: 0.55rem 0.8rem;
+    background: linear-gradient(180deg, #1d1411, #140d0b);
+    border-top: 1px dashed rgba(217, 180, 90, 0.5);
+    border-bottom: 1px dashed rgba(217, 180, 90, 0.5);
   }
-  .lt { display: flex; align-items: center; gap: 0.6rem; flex: 1; min-width: 0; }
-  .bar button { font-size: 0.85rem; padding: 0.4rem 0.7rem; }
+  .lt { display: flex; align-items: center; gap: 0.7rem; flex: 1; min-width: 0; }
+  .bar button { font-size: 0.8rem; padding: 0.4rem 0.7rem; }
   .cast.found { position: relative; }
   .cast.found::after {
     content: '';
@@ -451,29 +449,26 @@
     border-radius: 50%;
     background: #3ddc84; /* punto verde = TV detectada */
   }
-  .cast.on { background: var(--red-bg); border-color: #ff6a5a; color: #fff; box-shadow: var(--red-shadow); }
-  .castmsg { margin: 0 0.2rem 0.4rem; font-size: 0.85rem; color: #ffd166; }
+  .cast.on { background: var(--red-bg); border-color: var(--gold); color: #fff; box-shadow: var(--red-shadow); }
+  .castmsg { margin: 0.4rem 0.2rem; font-size: 0.85rem; color: var(--gold-light); }
   .title {
     flex: 1;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-family: var(--font-display);
-    font-weight: 900;
-    font-style: italic;
+    font-family: var(--font-marquee);
     font-size: 1.3rem;
-    text-transform: uppercase;
-    color: #fff;
+    color: var(--text);
   }
   .badge {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
+    font-weight: 600;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
     padding: 0.1rem 0.4rem;
-    border: 1px solid #3a4c74;
-    color: var(--muted);
+    border: 1px solid var(--gold-dark);
+    color: var(--gold);
   }
   label { display: flex; gap: 0.4rem; align-items: center; font-size: 0.9rem; color: var(--muted); }
 </style>

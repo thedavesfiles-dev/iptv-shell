@@ -94,12 +94,12 @@
         {#if hero.poster}<img src={img(hero.poster, 'w342')} alt="" />{/if}
       </div>
       <div class="hero-info">
-        <span class="kicker">#1 en tendencias {timeWindow === 'day' ? 'hoy' : 'esta semana'}</span>
+        <span class="kicker">★ En cartelera · #1 {timeWindow === 'day' ? 'hoy' : 'esta semana'} ★</span>
         <span class="hero-title">{hero.title}</span>
         {#if hero.overview}<span class="hero-sub">{hero.overview}</span>{/if}
       </div>
       {#if hero.rating}
-        <div class="hero-score"><span class="bignum">{hero.rating.toFixed(1)}</span><small>calificación</small></div>
+        <div class="hero-score"><span class="bignum">{hero.rating.toFixed(1)}</span><small>de 10</small></div>
       {/if}
       <div class="hero-bar">
         <span>{hero.type === 'tv' ? 'Serie' : 'Película'}</span>
@@ -176,124 +176,122 @@
   .catalog { max-width: 1400px; margin: 0 auto; padding: 1rem; }
 
   .toolbar { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
-  .segmented { display: flex; gap: 2px; }
+  .segmented { display: flex; gap: 0; border: 1px solid var(--gold-dark); border-radius: 2px; }
   .segmented button {
     padding: 0.45rem 1rem;
-    color: var(--muted);
-    font-style: italic;
-    font-size: 0.98rem;
+    border: 0;
+    border-right: 1px solid #3a2a1f;
     border-radius: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.9rem;
   }
-  .segmented button:first-child { border-radius: 3px 0 0 3px; }
-  .segmented button:last-child { border-radius: 0 3px 3px 0; }
-  .segmented button.active { background: var(--red-bg); border-color: #ff6a5a; color: #fff; box-shadow: var(--red-shadow); }
+  .segmented button:last-child { border-right: 0; }
+  .segmented button.active { background: linear-gradient(180deg, var(--gold-light), var(--gold) 60%, #b48d3c); color: #1a0f0b; }
   .search { flex: 1; min-width: 200px; }
 
   .favs { margin-bottom: 0.4rem; }
   .favs .sect { margin-top: 0.4rem; }
   .favs .empty { margin: 0 0 0.8rem; font-size: 0.9rem; }
 
-  /* ---------- Panel destacado ---------- */
+  /* ---------- Panel destacado: póster de vestíbulo con marco dorado ---------- */
   .hero {
     position: relative;
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: end;
-    gap: 1.2rem;
+    gap: 1.6rem;
     width: 100%;
-    min-height: 250px;
-    margin: 0.4rem 0 0.6rem;
-    padding: 1.2rem 1.2rem 3.2rem;
+    min-height: 300px;
+    margin: 1rem 0 0.4rem;
+    padding: 1.6rem 1.8rem 1.8rem;
     text-align: left;
     text-transform: none;
     letter-spacing: normal;
     font-family: var(--font);
     font-weight: 400;
-    border: 1px solid #3a4c74;
-    border-radius: 4px;
-    overflow: hidden;
+    color: var(--text);
+    border: 1px solid var(--gold);
+    border-radius: 2px;
     background:
-      linear-gradient(90deg, rgba(6, 10, 20, 0.95) 0%, rgba(6, 10, 20, 0.7) 45%, rgba(6, 10, 20, 0.35) 100%),
+      linear-gradient(90deg, rgba(12, 8, 7, 0.96) 0%, rgba(12, 8, 7, 0.75) 45%, rgba(12, 8, 7, 0.25) 100%),
+      linear-gradient(0deg, rgba(12, 8, 7, 0.9), transparent 45%),
       var(--bd) center 25% / cover no-repeat,
-      var(--panel-bg);
-    box-shadow: var(--panel-shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+      #120c0a;
+    box-shadow: inset 0 0 0 6px #120c0a, inset 0 0 0 7px rgba(217, 180, 90, 0.45), 0 18px 40px rgba(0, 0, 0, 0.6);
   }
-  .hero:hover { filter: none; }
-  .hero:hover .go { background: #fff; color: var(--accent-dark); }
+  .hero:hover { border-color: var(--gold-light); color: var(--text); }
+  .hero:hover .go { background: var(--gold); color: #1a0f0b; }
   .hero-poster img {
     display: block;
-    width: 150px;
+    width: 160px;
     aspect-ratio: 2 / 3;
     object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.85);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-    transform: rotate(-2deg);
+    border: 1px solid var(--gold);
+    outline: 5px solid #120c0a;
+    box-shadow: 0 0 0 6px rgba(217, 180, 90, 0.5), 0 16px 36px rgba(0, 0, 0, 0.75);
   }
-  .hero-info { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+  .hero-info { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
   .kicker {
-    align-self: flex-start;
-    padding: 0.12rem 0.55rem;
-    background: var(--red-bg);
-    box-shadow: var(--red-shadow);
     font-family: var(--font-display);
-    font-weight: 800;
-    font-style: italic;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
+    font-weight: 600;
+    font-size: 0.82rem;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--gold);
   }
   .hero-title {
-    font-family: var(--font-display);
-    font-weight: 900;
-    font-style: italic;
+    font-family: var(--font-marquee);
     font-size: clamp(2rem, 5vw, 3.6rem);
-    line-height: 0.95;
-    text-transform: uppercase;
-    color: #fff;
-    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+    line-height: 1.02;
+    color: var(--text);
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
   }
   .hero-sub {
     max-width: 60ch;
-    color: #c9d2e3;
-    font-size: 0.92rem;
-    line-height: 1.4;
+    color: #d6cab8;
+    font-size: 0.95rem;
+    line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  /* Calificación en sello dorado redondo */
   .hero-score {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0.5rem 0.9rem;
-    background: var(--panel-bg);
-    border: var(--panel-border);
-    box-shadow: var(--panel-shadow);
+    display: grid;
+    place-items: center;
+    align-content: center;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: radial-gradient(circle at 35% 30%, #2a1b14, #120c0a 70%);
+    box-shadow: inset 0 0 0 4px #120c0a, inset 0 0 0 5px rgba(217, 180, 90, 0.5), 0 8px 20px rgba(0, 0, 0, 0.6);
   }
-  .hero-score .bignum { font-size: 3rem; color: var(--gold); }
-  .hero-score small { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-size: 0.7rem; }
+  .hero-score .bignum { font-size: 2rem; color: var(--gold-light); }
+  .hero-score small { font-family: var(--font-display); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); font-size: 0.62rem; }
   .hero-bar {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    grid-column: 2 / -1;
+    margin-top: -0.6rem;
     display: flex;
     align-items: center;
     gap: 1.2rem;
-    padding: 0.45rem 1.2rem;
-    background: var(--red-bg);
-    box-shadow: var(--red-shadow);
     font-family: var(--font-display);
-    font-weight: 800;
-    font-style: italic;
-    letter-spacing: 0.06em;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--muted);
   }
-  .hero-bar .go { margin-left: auto; padding: 0.1rem 0.6rem; border: 1px solid #fff; transition: background 0.15s; }
+  .hero-bar .go {
+    margin-left: auto;
+    padding: 0.3rem 0.9rem;
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    transition: background 0.15s, color 0.15s;
+  }
 
   .error {
     display: flex;
@@ -301,8 +299,8 @@
     gap: 1rem;
     flex-wrap: wrap;
     padding: 0.8rem 1rem;
-    border-radius: 3px;
-    border-left: 4px solid var(--accent);
+    border-radius: 2px;
+    border-left: 3px solid var(--accent);
     background: rgba(229, 72, 77, 0.12);
     color: #ffb4b4;
     margin-bottom: 1rem;
@@ -325,8 +323,10 @@
   @media (max-width: 600px) {
     .catalog { padding: 0.75rem; }
     .search { min-width: 100%; order: -1; }
-    .hero { grid-template-columns: auto 1fr; min-height: 0; padding: 0.9rem 0.9rem 2.8rem; gap: 0.8rem; }
-    .hero-poster img { width: 90px; }
+    .hero { grid-template-columns: auto 1fr; min-height: 0; padding: 1rem; gap: 0.9rem; }
+    .hero-poster img { width: 92px; }
+    .hero-bar { grid-column: 1 / -1; margin-top: 0; }
+    .kicker { font-size: 0.68rem; letter-spacing: 0.14em; }
     .hero-score { display: none; }
     .hero-sub { display: none; }
   }

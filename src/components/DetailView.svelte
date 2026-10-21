@@ -235,7 +235,7 @@
     position: fixed;
     inset: 0;
     z-index: 50;
-    background: rgba(3, 6, 12, 0.82);
+    background: rgba(8, 5, 4, 0.86);
     backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
@@ -246,12 +246,11 @@
   .sheet {
     width: 100%;
     max-width: 920px;
-    background: linear-gradient(180deg, #121b2e, #0a1120 400px);
-    border: 2px solid #34456a;
-    border-bottom: 6px solid var(--accent);
-    border-radius: 4px;
+    background: linear-gradient(180deg, #1a110e, #0f0a08 420px);
+    border: 1px solid var(--gold);
+    border-radius: 2px;
     overflow: hidden;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 24px 70px rgba(0, 0, 0, 0.75);
+    box-shadow: inset 0 0 0 6px #120c0a, inset 0 0 0 7px rgba(217, 180, 90, 0.35), 0 30px 80px rgba(0, 0, 0, 0.8);
   }
   .hero {
     position: relative;
@@ -262,7 +261,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(10, 17, 32, 0) 30%, #121b2e);
+    background: linear-gradient(to bottom, rgba(26, 17, 14, 0) 30%, #1a110e);
   }
   .close {
     position: absolute;
@@ -271,11 +270,11 @@
     z-index: 1;
     width: 42px;
     height: 42px;
-    border-radius: 2px;
-    background: var(--red-bg);
-    border-color: #ff6a5a;
-    box-shadow: var(--red-shadow);
-    font-size: 1.1rem;
+    border-radius: 50%;
+    background: rgba(12, 8, 7, 0.85);
+    border-color: var(--gold);
+    color: var(--gold-light);
+    font-size: 1.05rem;
   }
 
   .body { padding: 0 1.5rem 1.5rem; margin-top: -90px; position: relative; }
@@ -284,58 +283,56 @@
     width: 150px;
     aspect-ratio: 2 / 3;
     object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--gold);
+    outline: 4px solid #120c0a;
     flex-shrink: 0;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 0 5px rgba(217, 180, 90, 0.45), 0 14px 32px rgba(0, 0, 0, 0.75);
   }
   .info { min-width: 0; }
   h2 {
     margin: 0;
-    font-family: var(--font-display);
-    font-weight: 900;
-    font-style: italic;
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
-    line-height: 0.95;
-    text-transform: uppercase;
-    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+    font-family: var(--font-marquee);
+    font-weight: 400;
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    line-height: 1.05;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
   }
   .orig { margin: 0.2rem 0 0; color: var(--muted); font-style: italic; }
   .facts {
     margin: 0.5rem 0 0;
     font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: 0.06em;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    font-size: 0.85rem;
     text-transform: uppercase;
-    color: #c9d2e3;
+    color: var(--gold);
   }
   .rating { margin: 0.3rem 0 0; display: flex; align-items: baseline; gap: 0.5rem; }
-  .rating .bignum { font-size: 2.6rem; color: var(--gold); }
+  .rating .bignum { font-size: 2.2rem; color: var(--gold-light); }
+  .rating .bignum::before { content: '★ '; font-size: 0.6em; vertical-align: 0.2em; }
   .rating small { color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.75rem; }
 
   .chips { list-style: none; padding: 0; margin: 0.6rem 0 0; display: flex; flex-wrap: wrap; gap: 0.35rem; }
   .chips li {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-style: italic;
-    font-size: 0.82rem;
-    letter-spacing: 0.06em;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     padding: 0.15rem 0.6rem;
-    background: var(--panel-bg);
-    border: 1px solid #3a4c74;
-    border-left: 3px solid var(--accent);
+    border: 1px solid var(--gold-dark);
+    border-radius: 999px;
+    color: var(--gold-light);
   }
 
   .tagline {
     margin: 1.2rem 0 0;
     padding-left: 0.7rem;
-    border-left: 3px solid var(--gold);
-    color: #dfe5f1;
-    font-family: var(--font-display);
-    font-weight: 700;
+    border-left: 2px solid var(--gold);
+    color: #e8dcc6;
+    font-family: Georgia, 'Times New Roman', serif;
     font-style: italic;
-    font-size: 1.15rem;
-    text-transform: uppercase;
+    font-size: 1.1rem;
   }
   .overview { line-height: 1.55; margin: 0.8rem 0 0; }
   .error { color: #ffb4b4; }
