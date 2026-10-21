@@ -1,4 +1,4 @@
-// src/sources/providers/mi-embed.js
+// C:\Users\16475\Proyectos\IPTV\iptv-shell\src\sources\providers\mi-embed.js
 
 export default {
   id: 'mi-embed',
@@ -11,16 +11,21 @@ export default {
   async find(req) {
     let embedUrl = '';
     
-    // 1. Usamos el dominio principal activo anunciado por la API
+    // Usamos el dominio principal activo anunciado por la API
     const baseUrl = 'https://vidsrc.sh';
 
-    // 2. Usamos la sintaxis `${ ... }` para que JavaScript reemplace el ID real
     if (req.type === 'movie') {
-      // Formato correcto oficial: /embed/movie/{id}
-      embedUrl = `${baseUrl}/movie/${req.tmdbId}`;
+      // En películas, la estructura de tu proyecto guarda el ID directo en req.tmdbId
+      const movieId = req.imdbId || req.tmdbId;
+      embedUrl = `${baseUrl}/movie/${movieId}`;
+      
     } else if (req.type === 'tv') {
-      // Formato correcto oficial: /embed/tv/{id}/{temporada}/{episodio}
-      embedUrl = `${baseUrl}/tv/${req.tmdbId}/${req.season}/${req.episode}`;
+      // ¡AQUÍ ESTABA EL ERROR! En series, tu arquitectura guarda los datos dentro de req.show
+      // Buscamos primero el imdbId en req.show.imdbId o req.imdbId
+      const serieId = req.show?.imdbId || req.imdbId || req.show?.tmdbId || req.tmdbId;
+      
+      // Estructura oficial: /embed/tv/{id}/{temporada}/{episodio}
+      embedUrl = `${baseUrl}/tv/${serieId}/${req.season.number}/${req.episode.number}`;
     }
 
     return [
@@ -32,3 +37,4 @@ export default {
     ];
   }
 };
+
