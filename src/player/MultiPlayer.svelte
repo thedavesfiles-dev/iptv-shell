@@ -97,6 +97,6 @@
   label { display: flex; gap: 0.4rem; align-items: center; font-size: 0.85rem; color: var(--muted); flex: 1; min-width: 0; }
   select { flex: 1; min-width: 0; max-width: 100%; font-size: 0.85rem; }
   button { font-size: 0.85rem; }
-  .notice { margin: 0.5rem 0 0; font-size: 0.85rem; color: #ffd166; }
+  .notice { margin: 0.5rem 0 0; font-size: 0.85rem; color: var(--gold); }
   .notice.bad { color: #ffb4b4; }
 </style>

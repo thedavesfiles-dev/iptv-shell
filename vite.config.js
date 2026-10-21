@@ -20,16 +20,16 @@ export default defineConfig(({ command, isPreview }) => ({
       includeAssets: ['icons/icon-192.png', 'icons/icon-512.png'],
 
       manifest: {
-        name: 'IPTV Shell',
-        short_name: 'IPTV Shell',
-        description: 'Reproductor personal M3U / HLS con metadatos de TMDB',
+        name: 'FD-TV',
+        short_name: 'FD-TV',
+        description: 'FD-TV: canales en vivo, películas y series',
         lang: 'es',
         start_url: '.',
         scope: '.',
         display: 'standalone',
         orientation: 'any', // celular vertical, TV/PC horizontal
-        background_color: '#0f1117',
-        theme_color: '#0f1117',
+        background_color: '#060a14',
+        theme_color: '#0b1324',
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' },
@@ -39,7 +39,7 @@ export default defineConfig(({ command, isPreview }) => ({
 
       workbox: {
         // Cachea solo el "caparazón" de la app (HTML, JS, CSS, íconos)
-        globPatterns: ['**/*.{js,css,html,png,svg,ico,webmanifest}'],
+        globPatterns: ['**/*.{js,css,html,png,svg,ico,webmanifest,woff2}'],
         navigateFallback: 'index.html',
         runtimeCaching: [
           {

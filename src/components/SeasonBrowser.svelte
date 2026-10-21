@@ -42,7 +42,7 @@
 </script>
 
 <section class="seasons">
-  <h3>Temporadas y episodios</h3>
+  <div class="sect"><span class="tag">EP</span><div class="label"><h3>Temporadas y episodios</h3><small>Toca un capítulo para reproducirlo</small></div></div>
 
   <div class="season-tabs" role="tablist" aria-label="Temporadas">
     {#each seasons as s (s.number)}
@@ -117,7 +117,6 @@
 
 <style>
   .seasons { margin-top: 1.6rem; }
-  h3 { margin: 0 0 0.7rem; font-size: 1.05rem; }
 
   .season-tabs {
     display: flex;
@@ -128,14 +127,13 @@
   }
   .season-tabs button {
     flex-shrink: 0;
-    border-radius: 999px;
-    padding: 0.4rem 0.9rem;
-    background: var(--surface-2);
-    border: 1px solid transparent;
+    padding: 0.4rem 1rem;
     color: var(--muted);
-    font-size: 0.9rem;
+    font-style: italic;
+    font-size: 1rem;
+    clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
   }
-  .season-tabs button.active { background: var(--text); color: var(--bg); font-weight: 600; }
+  .season-tabs button.active { background: var(--red-bg); border-color: #ff6a5a; color: #fff; box-shadow: var(--red-shadow); }
 
   .season-overview { color: var(--muted); font-size: 0.9rem; line-height: 1.5; margin: 0.6rem 0 0; }
   .error { color: #ffb4b4; }
@@ -145,17 +143,20 @@
     display: flex;
     gap: 0.9rem;
     padding: 0.6rem;
-    border-radius: 10px;
+    border-radius: 2px;
+    border-left: 3px solid transparent;
   }
-  .episode:hover { background: var(--surface-2); }
-  .episode.active { background: color-mix(in srgb, var(--accent) 18%, transparent); }
+  .episode:nth-child(even) { background: rgba(255, 255, 255, 0.025); }
+  .episode:hover { background: rgba(47, 95, 184, 0.2); }
+  .episode.active { background: rgba(227, 38, 29, 0.18); border-left-color: var(--accent); }
 
-  .play { padding: 0; border: 0; background: none; border-radius: 8px; flex-shrink: 0; }
+  .play { padding: 0; border: 0; background: none; box-shadow: none; border-radius: 2px; flex-shrink: 0; }
   .thumb {
     position: relative;
     width: 168px;
     aspect-ratio: 16 / 9;
-    border-radius: 8px;
+    border: 2px solid #34456a;
+    border-radius: 2px;
     overflow: hidden;
     background: var(--surface-2);
   }
@@ -179,12 +180,15 @@
     padding: 0;
     border: 0;
     background: none;
+    box-shadow: none;
     text-align: left;
-    font-weight: 600;
-    font-size: 0.95rem;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
   }
   .title:hover { text-decoration: underline; }
-  .num { color: var(--muted); }
+  .num { color: var(--gold); }
   .meta { margin: 0.15rem 0 0; font-size: 0.78rem; color: var(--muted); }
   .soon {
     margin-left: 0.4rem;
@@ -218,7 +222,8 @@
     padding: 0;
     border: 0;
     background: none;
-    color: var(--accent);
+    box-shadow: none;
+    color: #ff6a5a;
     font-size: 0.8rem;
     margin-top: 0.2rem;
   }

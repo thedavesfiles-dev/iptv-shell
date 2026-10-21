@@ -148,7 +148,7 @@
             ].filter(Boolean).join(' · ')}
           </p>
           {#if d.rating}
-            <p class="rating">★ {d.rating.toFixed(1)} <small>({d.votes.toLocaleString('es')} votos)</small></p>
+            <p class="rating"><span class="bignum">{d.rating.toFixed(1)}</span> <small>{d.votes.toLocaleString('es')} votos</small></p>
           {/if}
           {#if details?.genres?.length}
             <ul class="chips">
@@ -211,7 +211,7 @@
       </details>
 
       {#if details?.cast?.length}
-        <h3>Reparto</h3>
+        <div class="sect"><span class="tag">★</span><div class="label"><h3>Reparto</h3></div></div>
         <ul class="cast">
           {#each details.cast as c (c.id)}
             <li>
@@ -235,7 +235,8 @@
     position: fixed;
     inset: 0;
     z-index: 50;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(3, 6, 12, 0.82);
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -245,10 +246,12 @@
   .sheet {
     width: 100%;
     max-width: 920px;
-    background: var(--surface);
-    border-radius: 14px;
+    background: linear-gradient(180deg, #121b2e, #0a1120 400px);
+    border: 2px solid #34456a;
+    border-bottom: 6px solid var(--accent);
+    border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 24px 70px rgba(0, 0, 0, 0.75);
   }
   .hero {
     position: relative;
@@ -259,18 +262,19 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 40%, var(--surface));
+    background: linear-gradient(to bottom, rgba(10, 17, 32, 0) 30%, #121b2e);
   }
   .close {
     position: absolute;
     top: 0.8rem;
     right: 0.8rem;
     z-index: 1;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 0;
-    background: rgba(0, 0, 0, 0.6);
+    width: 42px;
+    height: 42px;
+    border-radius: 2px;
+    background: var(--red-bg);
+    border-color: #ff6a5a;
+    box-shadow: var(--red-shadow);
     font-size: 1.1rem;
   }
 
@@ -280,26 +284,64 @@
     width: 150px;
     aspect-ratio: 2 / 3;
     object-fit: cover;
-    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.85);
     flex-shrink: 0;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7);
   }
   .info { min-width: 0; }
-  h2 { margin: 0; font-size: 1.7rem; line-height: 1.15; }
+  h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-style: italic;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    line-height: 0.95;
+    text-transform: uppercase;
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+  }
   .orig { margin: 0.2rem 0 0; color: var(--muted); font-style: italic; }
-  .facts { margin: 0.4rem 0 0; color: var(--muted); }
-  .rating { margin: 0.3rem 0 0; color: #ffd166; font-weight: 600; }
-  .rating small { color: var(--muted); font-weight: 400; }
+  .facts {
+    margin: 0.5rem 0 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #c9d2e3;
+  }
+  .rating { margin: 0.3rem 0 0; display: flex; align-items: baseline; gap: 0.5rem; }
+  .rating .bignum { font-size: 2.6rem; color: var(--gold); }
+  .rating small { color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.75rem; }
 
   .chips { list-style: none; padding: 0; margin: 0.6rem 0 0; display: flex; flex-wrap: wrap; gap: 0.35rem; }
-  .chips li { font-size: 0.78rem; padding: 0.2rem 0.6rem; border-radius: 999px; background: var(--surface-2); }
+  .chips li {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.6rem;
+    background: var(--panel-bg);
+    border: 1px solid #3a4c74;
+    border-left: 3px solid var(--accent);
+  }
 
-  .tagline { margin: 1.2rem 0 0; color: var(--muted); font-style: italic; }
+  .tagline {
+    margin: 1.2rem 0 0;
+    padding-left: 0.7rem;
+    border-left: 3px solid var(--gold);
+    color: #dfe5f1;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    font-size: 1.15rem;
+    text-transform: uppercase;
+  }
   .overview { line-height: 1.55; margin: 0.8rem 0 0; }
   .error { color: #ffb4b4; }
 
   .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
-  .primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+
   .status { margin: 0.8rem 0 0; color: var(--muted); font-size: 0.9rem; }
   .status.warn { color: #ffd166; }
   .manual small { display: block; margin-top: 0.4rem; }
@@ -338,6 +380,6 @@
     .hero { height: 200px; }
     .body { padding: 0 1rem 1.5rem; margin-top: -70px; }
     .poster { width: 100px; }
-    h2 { font-size: 1.3rem; }
+    h2 { font-size: 2rem; }
   }
 </style>

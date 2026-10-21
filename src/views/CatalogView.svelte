@@ -4,6 +4,7 @@
   import PosterGrid from '../components/PosterGrid.svelte';
   import DetailView from '../components/DetailView.svelte';
   import { favorites } from '../stores/favorites.svelte.js';
+  import { img } from '../api/tmdb.js';
 
   const TYPES = [
     { id: 'all', label: 'Todo' },
@@ -21,6 +22,7 @@
   let loading = $state(false);
   let error = $state('');
   let selected = $state(null);
+  const hero = $derived(!query && items.length ? items[0] : null); // panel destacado
 
   let requestId = 0; // para ignorar respuestas viejas si el usuario cambia rápido de filtro
 
@@ -85,8 +87,30 @@
 </script>
 
 <section class="catalog">
+  <!-- Panel destacado: el #1 en tendencias -->
+  {#if hero}
+    <button class="hero" onclick={() => (selected = hero)} style:--bd={hero.backdrop ? `url(${img(hero.backdrop, 'w1280')})` : 'none'}>
+      <div class="hero-poster">
+        {#if hero.poster}<img src={img(hero.poster, 'w342')} alt="" />{/if}
+      </div>
+      <div class="hero-info">
+        <span class="kicker">#1 en tendencias {timeWindow === 'day' ? 'hoy' : 'esta semana'}</span>
+        <span class="hero-title">{hero.title}</span>
+        {#if hero.overview}<span class="hero-sub">{hero.overview}</span>{/if}
+      </div>
+      {#if hero.rating}
+        <div class="hero-score"><span class="bignum">{hero.rating.toFixed(1)}</span><small>calificación</small></div>
+      {/if}
+      <div class="hero-bar">
+        <span>{hero.type === 'tv' ? 'Serie' : 'Película'}</span>
+        {#if hero.year}<span>{hero.year}</span>{/if}
+        <span class="go">Ver ficha ▸</span>
+      </div>
+    </button>
+  {/if}
+
   <section class="favs">
-    <h2 class="heading">♥ Mis películas y series favoritas</h2>
+    <div class="sect"><span class="tag">♥</span><div class="label"><h2>Mis favoritas</h2><small>Películas y series guardadas</small></div></div>
     {#if favorites.titles.length}
       <PosterGrid row items={favorites.titles} onselect={(it) => (selected = it)} />
     {:else}
@@ -113,13 +137,16 @@
     <input class="search" type="search" bind:value={queryInput} placeholder="Buscar películas o series…" />
   </div>
 
-  <h2 class="heading">
-    {#if query}
-      Resultados para “{query}”
-    {:else}
-      Tendencias {timeWindow === 'day' ? 'de hoy' : 'de la semana'}
-    {/if}
-  </h2>
+  <div class="sect">
+    <span class="tag">{query ? 'Buscar' : 'Top'}</span>
+    <div class="label">
+      {#if query}
+        <h2>Resultados: {query}</h2><small>Películas y series</small>
+      {:else}
+        <h2>Tendencias {timeWindow === 'day' ? 'de hoy' : 'de la semana'}</h2><small>Lo más visto según TMDB</small>
+      {/if}
+    </div>
+  </div>
 
   {#if error}
     <div class="error">
@@ -149,27 +176,124 @@
   .catalog { max-width: 1400px; margin: 0 auto; padding: 1rem; }
 
   .toolbar { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
-  .segmented {
-    display: flex;
-    background: var(--surface);
-    border: 1px solid var(--surface-2);
-    border-radius: 999px;
-    padding: 3px;
-  }
+  .segmented { display: flex; gap: 2px; }
   .segmented button {
-    border: 0;
-    background: transparent;
-    border-radius: 999px;
-    padding: 0.4rem 0.9rem;
+    padding: 0.45rem 1rem;
     color: var(--muted);
+    font-style: italic;
+    font-size: 0.98rem;
+    border-radius: 0;
   }
-  .segmented button.active { background: var(--surface-2); color: var(--text); }
-  .search { flex: 1; min-width: 200px; border-radius: 999px; padding-left: 1rem; }
+  .segmented button:first-child { border-radius: 3px 0 0 3px; }
+  .segmented button:last-child { border-radius: 0 3px 3px 0; }
+  .segmented button.active { background: var(--red-bg); border-color: #ff6a5a; color: #fff; box-shadow: var(--red-shadow); }
+  .search { flex: 1; min-width: 200px; }
 
-  .heading { font-size: 1.15rem; margin: 1.2rem 0 0.9rem; }
-  .favs { margin-bottom: 0.6rem; }
-  .favs .heading { margin-top: 0.2rem; }
+  .favs { margin-bottom: 0.4rem; }
+  .favs .sect { margin-top: 0.4rem; }
   .favs .empty { margin: 0 0 0.8rem; font-size: 0.9rem; }
+
+  /* ---------- Panel destacado ---------- */
+  .hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: end;
+    gap: 1.2rem;
+    width: 100%;
+    min-height: 250px;
+    margin: 0.4rem 0 0.6rem;
+    padding: 1.2rem 1.2rem 3.2rem;
+    text-align: left;
+    text-transform: none;
+    letter-spacing: normal;
+    font-family: var(--font);
+    font-weight: 400;
+    border: 1px solid #3a4c74;
+    border-radius: 4px;
+    overflow: hidden;
+    background:
+      linear-gradient(90deg, rgba(6, 10, 20, 0.95) 0%, rgba(6, 10, 20, 0.7) 45%, rgba(6, 10, 20, 0.35) 100%),
+      var(--bd) center 25% / cover no-repeat,
+      var(--panel-bg);
+    box-shadow: var(--panel-shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+  .hero:hover { filter: none; }
+  .hero:hover .go { background: #fff; color: var(--accent-dark); }
+  .hero-poster img {
+    display: block;
+    width: 150px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    transform: rotate(-2deg);
+  }
+  .hero-info { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+  .kicker {
+    align-self: flex-start;
+    padding: 0.12rem 0.55rem;
+    background: var(--red-bg);
+    box-shadow: var(--red-shadow);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-style: italic;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-style: italic;
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    line-height: 0.95;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+  }
+  .hero-sub {
+    max-width: 60ch;
+    color: #c9d2e3;
+    font-size: 0.92rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .hero-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 0.9rem;
+    background: var(--panel-bg);
+    border: var(--panel-border);
+    box-shadow: var(--panel-shadow);
+  }
+  .hero-score .bignum { font-size: 3rem; color: var(--gold); }
+  .hero-score small { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-size: 0.7rem; }
+  .hero-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 0.45rem 1.2rem;
+    background: var(--red-bg);
+    box-shadow: var(--red-shadow);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .hero-bar .go { margin-left: auto; padding: 0.1rem 0.6rem; border: 1px solid #fff; transition: background 0.15s; }
 
   .error {
     display: flex;
@@ -177,7 +301,8 @@
     gap: 1rem;
     flex-wrap: wrap;
     padding: 0.8rem 1rem;
-    border-radius: 10px;
+    border-radius: 3px;
+    border-left: 4px solid var(--accent);
     background: rgba(229, 72, 77, 0.12);
     color: #ffb4b4;
     margin-bottom: 1rem;
@@ -200,5 +325,9 @@
   @media (max-width: 600px) {
     .catalog { padding: 0.75rem; }
     .search { min-width: 100%; order: -1; }
+    .hero { grid-template-columns: auto 1fr; min-height: 0; padding: 0.9rem 0.9rem 2.8rem; gap: 0.8rem; }
+    .hero-poster img { width: 90px; }
+    .hero-score { display: none; }
+    .hero-sub { display: none; }
   }
 </style>

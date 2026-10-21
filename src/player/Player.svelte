@@ -87,6 +87,7 @@
   let video = $state(null);
   let hls = null;
 
+  let isLive = $state(false);       // transmisión en directo (sin duración fija)
   let status = $state('idle');     // idle | loading | playing | paused | error
   let errorMsg = $state('');
   let levels = $state([]);         // calidades disponibles en HLS
@@ -147,6 +148,10 @@
       tryPlay();
     });
 
+    hls.on(Hls.Events.LEVEL_LOADED, (_e, data) => {
+      isLive = !!data.details?.live;
+    });
+
     hls.on(Hls.Events.LEVEL_SWITCHED, (_e, data) => {
       if (hls?.autoLevelEnabled) currentLevel = -1;
       else currentLevel = data.level;
@@ -186,6 +191,7 @@
 
     status = 'loading';
     errorMsg = '';
+    isLive = false;
 
     // Una página https no puede cargar video http:// (contenido mixto): el navegador lo bloquea
     if (location.protocol === 'https:' && url.startsWith('http://')) {
@@ -273,6 +279,7 @@
       allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
       allowfullscreen
       referrerpolicy="no-referrer"
+      sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
     ></iframe>
   {:else}
     <!-- svelte-ignore a11y_media_has_caption -->
@@ -289,6 +296,7 @@
       onpause={() => (status = 'paused')}
       onwaiting={() => (status = 'loading')}
       onerror={onVideoError}
+      onloadedmetadata={() => { if (video && video.duration === Infinity) isLive = true; }}
     ></video>
 
     {#if status === 'loading'}
@@ -306,8 +314,11 @@
 
 {#if src && resolvedType !== 'iframe'}
   <div class="bar">
-    <span class="title">{title}</span>
-    <span class="badge">{resolvedType.toUpperCase()}</span>
+    <div class="lt">
+      {#if isLive}<span class="live-tag">En vivo</span>{/if}
+      <span class="title">{title}</span>
+      <span class="badge">{resolvedType.toUpperCase()}</span>
+    </div>
     {#if levels.length > 1}
       <label>
         Calidad
@@ -334,16 +345,22 @@
 {/if}
 
 <style>
+  /* Monitor con marco metálico biselado */
   .player {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
     background: #000;
-    border-radius: 10px;
+    border: 3px solid #34456a;
+    border-radius: 4px;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 0 0 1px #0a1222,
+      0 14px 34px rgba(0, 0, 0, 0.7);
     overflow: hidden;
     outline: none;
   }
-  .player:focus-visible { box-shadow: 0 0 0 3px var(--accent); }
+  .player:focus-visible { border-color: var(--gold); }
 
   video, iframe {
     width: 100%;
@@ -358,9 +375,19 @@
     inset: 0;
     display: grid;
     place-items: center;
-    color: var(--muted);
     padding: 1rem;
     text-align: center;
+    color: var(--muted);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-style: italic;
+    font-size: 1.2rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 40%, rgba(47, 95, 184, 0.25), transparent 70%),
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 4px),
+      #04070e;
   }
 
   .overlay {
@@ -397,13 +424,22 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* Rótulo inferior ("lower third") con acento rojo */
   .bar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.6rem 0.2rem;
+    gap: 0.5rem 0.75rem;
+    margin-top: 6px;
+    padding: 0.45rem 0.6rem;
+    background: var(--panel-bg);
+    border: var(--panel-border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 4px 4px;
+    box-shadow: var(--panel-shadow);
   }
+  .lt { display: flex; align-items: center; gap: 0.6rem; flex: 1; min-width: 0; }
+  .bar button { font-size: 0.85rem; padding: 0.4rem 0.7rem; }
   .cast.found { position: relative; }
   .cast.found::after {
     content: '';
@@ -415,14 +451,28 @@
     border-radius: 50%;
     background: #3ddc84; /* punto verde = TV detectada */
   }
-  .cast.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .cast.on { background: var(--red-bg); border-color: #ff6a5a; color: #fff; box-shadow: var(--red-shadow); }
   .castmsg { margin: 0 0.2rem 0.4rem; font-size: 0.85rem; color: #ffd166; }
-  .title { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-style: italic;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    color: #fff;
+  }
   .badge {
-    font-size: 0.7rem;
-    padding: 0.15rem 0.45rem;
-    border-radius: 4px;
-    background: var(--surface-2);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    padding: 0.1rem 0.4rem;
+    border: 1px solid #3a4c74;
     color: var(--muted);
   }
   label { display: flex; gap: 0.4rem; align-items: center; font-size: 0.9rem; color: var(--muted); }

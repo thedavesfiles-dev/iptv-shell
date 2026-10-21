@@ -25,7 +25,7 @@
             <div class="noposter">{item.title}</div>
           {/if}
           {#if item.rating}
-            <span class="rating">★ {item.rating.toFixed(1)}</span>
+            <span class="rating">{item.rating.toFixed(1)}</span>
           {/if}
           <span class="kind">{item.type === 'tv' ? 'Serie' : 'Película'}</span>
         </div>
@@ -71,29 +71,49 @@
     padding: 0;
     border: 0;
     background: transparent;
+    box-shadow: none;
     text-align: left;
+    text-transform: none;
+    letter-spacing: normal;
+    font-family: var(--font);
+    font-weight: 400;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
-    border-radius: 10px;
+    gap: 0;
+    border-radius: 3px;
   }
-  .card:hover .poster img,
-  .card:focus-visible .poster img { transform: scale(1.04); }
-  .card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .card:hover { filter: none; }
+  .card:hover .poster, .card:focus-visible .poster {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px var(--gold), 0 10px 24px rgba(0, 0, 0, 0.6);
+    transform: translateY(-3px);
+  }
+  .card:focus-visible { outline: none; }
 
+  /* Póster con marco metálico biselado y brillo de vidrio arriba */
   .poster {
     position: relative;
     aspect-ratio: 2 / 3;
-    border-radius: 10px;
+    border: 2px solid #3a4c74;
+    border-bottom: 0;
+    border-radius: 3px 3px 0 0;
     overflow: hidden;
-    background: var(--surface-2);
+    background: var(--panel-bg);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .poster::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 22%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.55) 100%);
+    pointer-events: none;
   }
   .poster img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.25s ease;
   }
   .noposter {
     height: 100%;
@@ -102,32 +122,73 @@
     padding: 0.5rem;
     text-align: center;
     color: var(--muted);
-    font-size: 0.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-style: italic;
+    text-transform: uppercase;
   }
 
-  .rating, .kind {
+  /* Calificación: número grande tipo marcador */
+  .rating {
     position: absolute;
-    font-size: 0.72rem;
-    font-weight: 600;
-    padding: 0.15rem 0.4rem;
-    border-radius: 5px;
-    background: rgba(0, 0, 0, 0.72);
+    z-index: 1;
+    left: 0;
+    bottom: 6px;
+    padding: 0.05rem 0.45rem 0.05rem 0.35rem;
+    background: var(--panel-bg);
+    border: 1px solid #3a4c74;
+    border-left: 3px solid var(--gold);
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--gold);
+    box-shadow: var(--panel-shadow);
   }
-  .rating { top: 6px; left: 6px; color: #ffd166; }
-  .kind { bottom: 6px; right: 6px; color: #fff; }
+  .kind {
+    position: absolute;
+    z-index: 1;
+    top: 6px;
+    left: 0;
+    padding: 0.05rem 0.45rem;
+    background: var(--red-bg);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-style: italic;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+  }
 
-  .meta { display: flex; flex-direction: column; padding: 0 0.15rem; min-width: 0; }
+  /* Rótulo inferior: título en mayúsculas condensadas + año */
+  .meta {
+    display: flex;
+    flex-direction: column;
+    padding: 0.35rem 0.5rem 0.4rem;
+    min-width: 0;
+    background: var(--panel-bg);
+    border: 2px solid #3a4c74;
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 3px 3px;
+  }
   .title {
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: #fff;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .year { font-size: 0.8rem; color: var(--muted); }
+  .year { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.06em; }
 
   @media (max-width: 600px) {
     .kind { display: none; }
-    .title { font-size: 0.8rem; }
+    .title { font-size: 0.85rem; }
+    .rating { font-size: 0.9rem; }
   }
 </style>
