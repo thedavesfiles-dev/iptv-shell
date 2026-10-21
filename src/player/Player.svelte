@@ -279,8 +279,7 @@
       allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
       allowfullscreen
       referrerpolicy="no-referrer"
-      sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
-    ></iframe>
+      ></iframe>
   {:else}
     <!-- svelte-ignore a11y_media_has_caption -->
     <video
