@@ -1,40 +1,23 @@
-// C:\Users\16475\Proyectos\IPTV\iptv-shell\src\sources\providers\mi-embed.js
+// src/sources/index.js
+import miEmbed from './mi-embed.js';
+import jellyfin from './jellyfin.js';
+import archive from './archive.js';
 
+// Creamos una lista limpia de proveedores registrados
+const providersList = [miEmbed, jellyfin, archive];
+
+// Exportamos un objeto compatible con lo que el motor de tu reproductor espera consumir
 export default {
-  id: 'mi-embed',
-  name: 'Servidor Alternativo',
-
-  supports(req) {
-    return req.type === 'movie' || req.type === 'tv';
+  providers: providersList,
+  
+  // Añadimos un método de filtrado directo por si el motor de la app lo llama desde aquí
+  filter(callback) {
+    return providersList.filter(callback);
   },
-
-  async find(req) {
-    let embedUrl = '';
-    const baseUrl = 'https://vidsrc.sh';
-
-    if (req.type === 'movie') {
-      // Si hay IMDb ID (tt...) lo prefiere, si no usa TMDB numérico
-      const movieId = req.imdbId || req.tmdbId;
-      embedUrl = `${baseUrl}/movie/${movieId}`;
-      
-    } else if (req.type === 'tv') {
-      // Las series en VidSrc exigen obligatoriamente el IMDb ID (tt...) para no dar 404
-      const serieId = req.imdbId || req.tmdbId;
-      
-      // Según el contrato de tu archivo index, llegan directo como req.season y req.episode
-      const temporadaNum = req.season;
-      const episodioNum = req.episode;
-      
-      embedUrl = `${baseUrl}/tv/${serieId}/${temporadaNum}/${episodioNum}`;
-    }
-
-    return [
-      {
-        src: embedUrl,
-        type: 'iframe',
-        label: 'Servidor Principal (Latino/Sub)'
-      }
-    ];
+  
+  // Añadimos soporte para bucles directos en caso de que la app recorra el objeto completo
+  forEach(callback) {
+    providersList.forEach(callback);
   }
 };
 
