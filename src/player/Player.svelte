@@ -9,7 +9,7 @@
    */
   import Hls from 'hls.js';
   import { detectType } from './detectType.js';
-  import { castInfo, initCast, castMedia, stopCasting } from './cast.svelte.js';
+  import { castInfo, initCast, castMedia, stopCasting, NO_TV_MSG } from './cast.svelte.js';
 
   let {
     src = '',
@@ -24,13 +24,18 @@
   } = $props();
 
   /* ---------- Transmitir a TV ---------- */
-  let airplayAvailable = $state(false);
-  let remoteAvailable = $state(false);
+  // El botón aparece siempre que el navegador PUEDA transmitir (no solo cuando ya ve una TV),
+  // y si no encuentra ninguna, explica qué revisar.
+  let airplayAvailable = $state(false);   // Safari ya detectó un Apple TV / tele AirPlay
+  let remoteAvailable = $state(false);    // Remote Playback API ya detectó un dispositivo
+  let remoteSupported = $state(false);    // Remote Playback API funciona con este video
   let castMsg = $state('');
+  const hasAirplay = typeof window !== 'undefined' && 'WebKitPlaybackTargetAvailabilityEvent' in window;
 
   initCast(); // carga el SDK de Google Cast en segundo plano (solo hace algo en Chrome/Edge)
 
-  const canCast = $derived(castInfo.available || airplayAvailable || remoteAvailable);
+  const castSupported = $derived(castInfo.ready || hasAirplay || remoteSupported);
+  const tvFound = $derived(castInfo.available || airplayAvailable || remoteAvailable);
 
   // AirPlay (Safari) y Remote Playback API (solo video directo, no hls.js)
   $effect(() => {
@@ -41,11 +46,12 @@
     v.addEventListener('webkitplaybacktargetavailabilitychanged', onAirplay);
     let watchId = null;
     remoteAvailable = false;
+    remoteSupported = false;
     if (v.remote?.watchAvailability) {
       v.remote
         .watchAvailability((a) => (remoteAvailable = a))
-        .then((id) => (watchId = id))
-        .catch(() => (remoteAvailable = false)); // no soportado (p. ej. con hls.js)
+        .then((id) => { watchId = id; remoteSupported = true; })
+        .catch(() => { remoteSupported = false; }); // no soportado (p. ej. con hls.js)
     }
     return () => {
       v.removeEventListener('webkitplaybacktargetavailabilitychanged', onAirplay);
@@ -56,8 +62,9 @@
   async function startCast() {
     castMsg = '';
     try {
-      if (castInfo.available) {
-        castMsg = 'Conectando con la TV…';
+      if (castInfo.ready) {
+        // Chrome / Edge: abre el selector de Google Cast (aunque aún no haya detectado TV)
+        castMsg = 'Buscando TV…';
         await castMedia({
           src,
           type: resolvedType === 'hls' ? 'hls' : 'mp4',
@@ -67,13 +74,13 @@
         });
         video?.pause();
         castMsg = '';
-      } else if (airplayAvailable && video?.webkitShowPlaybackTargetPicker) {
-        video.webkitShowPlaybackTargetPicker();
-      } else if (remoteAvailable) {
+      } else if (hasAirplay && video?.webkitShowPlaybackTargetPicker) {
+        video.webkitShowPlaybackTargetPicker(); // selector de AirPlay de Apple
+      } else if (remoteSupported) {
         await video.remote.prompt();
       }
     } catch (e) {
-      castMsg = e.message;
+      castMsg = e?.name === 'NotFoundError' ? NO_TV_MSG : e?.message || String(e);
     }
   }
 
@@ -316,8 +323,11 @@
     {@render actions?.()}
     {#if castInfo.connected}
       <button class="cast on" onclick={stopCasting} title="Detener transmisión">📺 En {castInfo.deviceName || 'la TV'} · Detener</button>
-    {:else if canCast}
-      <button class="cast" onclick={startCast} title="Transmitir a TV / Chromecast">📺 Transmitir</button>
+    {:else if castSupported}
+      <button class="cast" class:found={tvFound} onclick={startCast}
+              title={tvFound ? 'TV detectada en tu Wi-Fi: toca para transmitir' : 'Toca para buscar una TV en tu Wi-Fi'}>
+        📺 Transmitir
+      </button>
     {/if}
     <button onclick={toggleFullscreen}>Pantalla completa</button>
   </div>
@@ -394,6 +404,17 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.6rem 0.2rem;
+  }
+  .cast.found { position: relative; }
+  .cast.found::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #3ddc84; /* punto verde = TV detectada */
   }
   .cast.on { background: var(--accent); border-color: var(--accent); color: #fff; }
   .castmsg { margin: 0 0.2rem 0.4rem; font-size: 0.85rem; color: #ffd166; }

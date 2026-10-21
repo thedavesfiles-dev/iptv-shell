@@ -20,6 +20,10 @@ export const castInfo = $state({
   deviceName: ''
 });
 
+export const NO_TV_MSG =
+  'No se encontró ninguna TV. Revisa que la TV o el Chromecast estén encendidos y que este ' +
+  'dispositivo esté en la misma red Wi-Fi (no con datos móviles).';
+
 let loading = null;
 
 export function initCast() {
@@ -70,8 +74,9 @@ export async function castMedia({ src, type, title = '', poster = '', live = fal
   if (!ctx.getCurrentSession()) {
     try {
       await ctx.requestSession();
-    } catch {
-      throw new Error('Transmisión cancelada.');
+    } catch (e) {
+      // 'cancel' = el usuario cerró el selector; 'receiver_unavailable' = no hay TV en la red
+      throw new Error(e === 'cancel' || e?.code === 'cancel' ? 'Transmisión cancelada.' : NO_TV_MSG);
     }
   }
   const session = ctx.getCurrentSession();
