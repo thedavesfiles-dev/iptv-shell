@@ -12,20 +12,23 @@ const provider = {
     if (!req) return [];
     
     let embedUrl = '';
-    const baseUrl = 'https://vidsrc.me.ss';
+    
+    // Cambiamos al reproductor API real que indexa doblajes en Español Latino y Castellano
+    const baseUrl = 'https://vidsrc.cc/v2/embed';
 
     if (req.type === 'movie') {
-      const movieId = req.tmdbId || req.imdbId;
+      const movieId = req.imdbId || req.tmdbId;
       if (!movieId) return [];
       embedUrl = `${baseUrl}/movie/${movieId}`;
       
     } else if (req.type === 'tv') {
-      const serieId = req.tmdbId || req.imdbId;
+      const serieId = req.imdbId || req.tmdbId;
       if (!serieId) return [];
       
       const temporadaNum = req.season || 1;
       const episodioNum = req.episode || 1;
       
+      // Estructura oficial multilingüe: /tv/{id}/{temporada}/{episodio}
       embedUrl = `${baseUrl}/tv/${serieId}/${temporadaNum}/${episodioNum}`;
     }
 
@@ -40,3 +43,4 @@ const provider = {
 };
 
 export default provider;
+
