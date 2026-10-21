@@ -1,4 +1,4 @@
-// C:\Users\16475\Proyectos\IPTV\iptv-shell\src\sources\providers\mi-embed.js
+// src/sources/providers/mi-embed.js
 
 export default {
   id: 'mi-embed',
@@ -10,22 +10,24 @@ export default {
 
   async find(req) {
     let embedUrl = '';
-    
-    // Usamos el dominio principal activo anunciado por la API
     const baseUrl = 'https://vidsrc.sh';
 
     if (req.type === 'movie') {
-      // En películas, la estructura de tu proyecto guarda el ID directo en req.tmdbId
+      // 1. En películas, el ID se guarda directo en req.tmdbId o req.imdbId
       const movieId = req.imdbId || req.tmdbId;
       embedUrl = `${baseUrl}/movie/${movieId}`;
       
     } else if (req.type === 'tv') {
-      // ¡AQUÍ ESTABA EL ERROR! En series, tu arquitectura guarda los datos dentro de req.show
-      // Buscamos primero el imdbId en req.show.imdbId o req.imdbId
+      // 2. ¡AQUÍ ESTÁ LA CLAVE! En las series, tu app agrupa los datos dentro de req.show
+      // Buscamos de forma segura el identificador de la serie
       const serieId = req.show?.imdbId || req.imdbId || req.show?.tmdbId || req.tmdbId;
       
-      // Estructura oficial: /embed/tv/{id}/{temporada}/{episodio}
-      embedUrl = `${baseUrl}/tv/${serieId}/${req.season.number}/${req.episode.number}`;
+      // 3. Tu app maneja las temporadas y episodios como objetos. 
+      // Extraemos exclusivamente el número entero (.number) para armar la URL oficial de VidSrc
+      const temporadaNum = req.season?.number || req.season;
+      const episodioNum = req.episode?.number || req.episode;
+      
+      embedUrl = `${baseUrl}/tv/${serieId}/${temporadaNum}/${episodioNum}`;
     }
 
     return [
@@ -37,4 +39,5 @@ export default {
     ];
   }
 };
+
 
