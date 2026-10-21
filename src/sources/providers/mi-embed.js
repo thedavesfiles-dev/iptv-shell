@@ -1,35 +1,35 @@
-// src/sources/providers/mi-embed.js
+// C:\Users\16475\Proyectos\IPTV\iptv-shell\src\sources\providers\mi-embed.js
 
-export default {
+const provider = {
   id: 'mi-embed',
   name: 'Servidor Alternativo',
 
   supports(req) {
-    return req.type === 'movie' || req.type === 'tv';
+    return req && (req.type === 'movie' || req.type === 'tv');
   },
 
   async find(req) {
+    if (!req) return [];
+    
     let embedUrl = '';
     const baseUrl = 'https://vidsrc.sh';
 
     if (req.type === 'movie') {
-      // 1. En películas, el ID se guarda directo en req.tmdbId o req.imdbId
       const movieId = req.imdbId || req.tmdbId;
+      if (!movieId) return [];
       embedUrl = `${baseUrl}/movie/${movieId}`;
       
     } else if (req.type === 'tv') {
-      // 2. ¡AQUÍ ESTÁ LA CLAVE! En las series, tu app agrupa los datos dentro de req.show
-      // Buscamos de forma segura el identificador de la serie
-      const serieId = req.show?.imdbId || req.imdbId || req.show?.tmdbId || req.tmdbId;
+      const serieId = req.imdbId || req.tmdbId;
+      if (!serieId) return [];
       
-      // 3. Tu app maneja las temporadas y episodios como objetos. 
-      // Extraemos exclusivamente el número entero (.number) para armar la URL oficial de VidSrc
-      const temporadaNum = req.season?.number || req.season;
-      const episodioNum = req.episode?.number || req.episode;
+      const temporadaNum = req.season || 1;
+      const episodioNum = req.episode || 1;
       
       embedUrl = `${baseUrl}/tv/${serieId}/${temporadaNum}/${episodioNum}`;
     }
 
+    // Retornamos estrictamente un arreglo limpio con el formato de origen que pide tu app
     return [
       {
         src: embedUrl,
@@ -39,5 +39,7 @@ export default {
     ];
   }
 };
+
+export default provider;
 
 
