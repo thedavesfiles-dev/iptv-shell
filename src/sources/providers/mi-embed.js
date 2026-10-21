@@ -1,21 +1,16 @@
-// src/sources/providers/mi-embed.js
-
-export default {
-  id: 'mi-embed',
-  name: 'Servidor Alternativo',
-
-  supports(req) {
-    return req.type === 'movie' || req.type === 'tv';
-  },
-
   async find(req) {
     let embedUrl = '';
+    
+    // 1. Usamos el dominio principal activo anunciado por la API
+    const baseUrl = 'https://vidsrc.sh';
 
-    // Usamos el dominio activo vidsrc.me con las variables bien estructuradas
+    // 2. Usamos la sintaxis `${ ... }` para que JavaScript reemplace el ID real
     if (req.type === 'movie') {
-      embedUrl = `https://vidsrc.me{req.tmdbId}`;
+      // Formato correcto oficial: /embed/movie/{id}
+      embedUrl = `${baseUrl}/movie/${req.tmdbId}`;
     } else if (req.type === 'tv') {
-      embedUrl = `https://vidsrc.me{req.tmdbId}&sea=${req.season}&epi=${req.episode}`;
+      // Formato correcto oficial: /embed/tv/{id}/{temporada}/{episodio}
+      embedUrl = `${baseUrl}/tv/${req.tmdbId}/${req.season}/${req.episode}`;
     }
 
     return [
@@ -26,4 +21,3 @@ export default {
       }
     ];
   }
-};
