@@ -1,3 +1,13 @@
+// src/sources/providers/mi-embed.js
+
+export default {
+  id: 'mi-embed',
+  name: 'Servidor Alternativo',
+
+  supports(req) {
+    return req.type === 'movie' || req.type === 'tv';
+  },
+
   async find(req) {
     let embedUrl = '';
     
@@ -21,3 +31,4 @@
       }
     ];
   }
+};
